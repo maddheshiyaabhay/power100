@@ -49,12 +49,26 @@
         sql.append(" ORDER BY name ASC");
     }
 
-    Connection conn = (Connection) session.getAttribute("dbConn");
-    List<Map<String,Object>> items = new ArrayList<Map<String,Object>>();
+    // SAFER: fetch connection from session attribute put there by dbConnection.jsp
+    Connection conn = null;
     String errorMsg = null;
+    Object dbObj = session.getAttribute("dbConn");
+    if (dbObj != null && dbObj instanceof java.sql.Connection) {
+        conn = (Connection) dbObj;
+    } else {
+        // If dbConnection.jsp failed to create connection it stored error there
+        Object eMsg = session.getAttribute("dbConnError");
+        if (eMsg != null) {
+            errorMsg = String.valueOf(eMsg);
+        } else {
+            errorMsg = "Database connection not found. (Check dbConnection.jsp)";
+        }
+    }
+
+    List<Map<String,Object>> items = new ArrayList<Map<String,Object>>();
 
     if (conn == null) {
-        errorMsg = "Database connection not found. (Check dbConnection.jsp)";
+        // leave items empty and show error later
     } else {
         try {
             PreparedStatement ps = conn.prepareStatement(sql.toString());
