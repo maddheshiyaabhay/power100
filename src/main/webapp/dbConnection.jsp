@@ -1,49 +1,24 @@
-<%@ page import="java.sql.*" %>
+<%@ page contentType="text/plain; charset=UTF-8" pageEncoding="UTF-8" import="java.sql.*" %>
 <%
-    // ========= DATABASE CONNECTION START =========
+final String JDBC_URL = "jdbc:mysql://turntable.proxy.rlwy.net:50177/railway"
+    + "?useSSL=true"
+    + "&requireSSL=true"
+    + "&verifyServerCertificate=false"
+    + "&allowPublicKeyRetrieval=true"
+    + "&serverTimezone=UTC"
+    + "&enabledTLSProtocols=TLSv1.2"
+    + "&connectTimeout=10000"
+    + "&socketTimeout=10000"
+    + "&autoReconnect=true";
+final String USER = "root";
+final String PASS = "EqekYOUtDaWViYKHnZTyxPwKjVxCtQrH";
 
-    // 👉 Railway MySQL Credentials (Public Networking)
-    final String JDBC_URL = "jdbc:mysql://turntable.proxy.rlwy.net:50177/railway"
-        + "?useSSL=true"
-        + "&requireSSL=true"
-        + "&verifyServerCertificate=false"
-        + "&allowPublicKeyRetrieval=true"
-        + "&serverTimezone=UTC"
-        + "&enabledTLSProtocols=TLSv1.2"
-        + "&connectTimeout=10000"
-        + "&socketTimeout=10000"
-        + "&autoReconnect=true";
-
-    final String USER = "root";
-    final String PASS = "EqekYOUtDaWViYKHnZTyxPwKjVxCtQrH";
-
-    Connection conn = null;
-
-    try {
-        // ✅ Load MySQL Driver
-        Class.forName("com.mysql.cj.jdbc.Driver");
-
-        // ✅ Create Connection
-        conn = DriverManager.getConnection(JDBC_URL, USER, PASS);
-
-        // ✅ Store in application context
-        application.setAttribute("DB_CONN", conn);
-
-        out.println("<html><body style='font-family:sans-serif;'>");
-        out.println("<h2 style='color:green'>✅ Database Connected Successfully!</h2>");
-        out.println("<p><b>JDBC URL:</b><br>" jdbc:mysql://turntable.proxy.rlwy.net:50177/railway "</p>");
-        out.println("<p><b>User:</b> "  root "</p>");
-        out.println("</body></html>");
-    } catch (Exception e) {
-        out.println("<html><body style='font-family:sans-serif;'>");
-        out.println("<h2 style='color:red'>❌ Database Connection Error</h2>");
-        out.println("<pre style='background:#fee;padding:10px;border-radius:8px;'>" + e + "</pre>");
-        out.println("</body></html>");
-    } finally {
-        try {
-            if (conn != null && !conn.isClosed()) conn.close();
-        } catch (Exception ignore) {}
+try {
+    Class.forName("com.mysql.cj.jdbc.Driver");
+    try (Connection conn = DriverManager.getConnection(JDBC_URL, USER, PASS)) {
+        out.write("DB CONNECTED");
     }
-
-    // ========= DATABASE CONNECTION END =========
+} catch (Throwable e) {
+    e.printStackTrace(new java.io.PrintWriter(out));
+}
 %>
