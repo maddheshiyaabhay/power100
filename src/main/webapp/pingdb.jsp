@@ -1,6 +1,6 @@
 <%@ page import="java.sql.*" %>
 <%
-    // ========= DATABASE CONNECTION START =========
+    // ========= DATABASE PING TEST START =========
 
     // 👉 Railway MySQL Credentials (Public Networking)
     final String JDBC_URL = "jdbc:mysql://turntable.proxy.rlwy.net:50177/railway"
@@ -20,30 +20,34 @@
     Connection conn = null;
 
     try {
-        // ✅ Load MySQL Driver
+        // ✅ Load driver and connect
         Class.forName("com.mysql.cj.jdbc.Driver");
-
-        // ✅ Create Connection
         conn = DriverManager.getConnection(JDBC_URL, USER, PASS);
 
-        // ✅ Store in application context
-        application.setAttribute("DB_CONN", conn);
+        // ✅ Simple Ping Query
+        PreparedStatement ps = conn.prepareStatement("SELECT 1");
+        ResultSet rs = ps.executeQuery();
 
         out.println("<html><body style='font-family:sans-serif;'>");
-        out.println("<h2 style='color:green'>✅ Database Connected Successfully!</h2>");
+        if (rs.next()) {
+            out.println("<h2 style='color:green'>✅ Ping Successful! Database Working Properly.</h2>");
+            out.println("<p>Result: " + rs.getInt(1) + "</p>");
+        } else {
+            out.println("<h2 style='color:orange'>⚠ Connected, but query returned no result.</h2>");
+        }
         out.println("<p><b>JDBC URL:</b><br>" jdbc:mysql://turntable.proxy.rlwy.net:50177/railway "</p>");
-        out.println("<p><b>User:</b> "  root "</p>");
         out.println("</body></html>");
+
+        rs.close();
+        ps.close();
     } catch (Exception e) {
         out.println("<html><body style='font-family:sans-serif;'>");
-        out.println("<h2 style='color:red'>❌ Database Connection Error</h2>");
+        out.println("<h2 style='color:red'>❌ Ping Test Failed</h2>");
         out.println("<pre style='background:#fee;padding:10px;border-radius:8px;'>" + e + "</pre>");
         out.println("</body></html>");
     } finally {
-        try {
-            if (conn != null && !conn.isClosed()) conn.close();
-        } catch (Exception ignore) {}
+        try { if (conn != null && !conn.isClosed()) conn.close(); } catch (Exception ignore) {}
     }
 
-    // ========= DATABASE CONNECTION END =========
+    // ========= DATABASE PING TEST END =========
 %>
