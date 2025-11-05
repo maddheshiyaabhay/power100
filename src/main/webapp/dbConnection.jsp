@@ -1,24 +1,17 @@
-<%@ page contentType="text/plain; charset=UTF-8" pageEncoding="UTF-8" import="java.sql.*" %>
+<%@ page import="java.sql.*" %>
 <%
-final String JDBC_URL = "jdbc:mysql://turntable.proxy.rlwy.net:50177/railway"
-    + "?useSSL=true"
-    + "&requireSSL=true"
-    + "&verifyServerCertificate=false"
-    + "&allowPublicKeyRetrieval=true"
-    + "&serverTimezone=UTC"
-    + "&enabledTLSProtocols=TLSv1.2"
-    + "&connectTimeout=10000"
-    + "&socketTimeout=10000"
-    + "&autoReconnect=true";
-final String USER = "root";
-final String PASS = "EqekYOUtDaWViYKHnZTyxPwKjVxCtQrH";
-
 try {
     Class.forName("com.mysql.cj.jdbc.Driver");
-    try (Connection conn = DriverManager.getConnection(JDBC_URL, USER, PASS)) {
-        out.write("DB CONNECTED");
-    }
-} catch (Throwable e) {
-    e.printStackTrace(new java.io.PrintWriter(out));
+    Connection conn = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/power100db",
+        "root",
+        "12345"   // apna MySQL password
+    );
+
+    // Connection ko session me store kar diya
+    session.setAttribute("dbConn", conn);
+
+} catch (Exception e) {
+    out.println("<div style='color:red;'>Database Connection Error: " + e.getMessage() + "</div>");
 }
 %>
