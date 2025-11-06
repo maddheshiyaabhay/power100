@@ -1,17 +1,14 @@
-<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.*, com.power100.util.DBConnection" %>
+
 <%
 try {
-    Class.forName("com.mysql.cj.jdbc.Driver");
-    Connection conn = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/power100db",
-        "root",
-        "12345"   // apna MySQL password
-    );
+    // Get connection from DBConnection class
+    Connection conn = DBConnection.getConnection();
 
-    // Connection ko session me store kar diya
+    // Store connection in session
     session.setAttribute("dbConn", conn);
 
 } catch (Exception e) {
-    out.println("<div style='color:red;'>Database Connection Error: " + e.getMessage() + "</div>");
+    out.println("<div style='color:red;'>❌ Database Connection Error: " + e.getMessage() + "</div>");
 }
 %>
