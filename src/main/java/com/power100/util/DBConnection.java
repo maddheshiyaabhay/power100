@@ -8,21 +8,21 @@ public class DBConnection {
 
     private static Connection connection = null;
 
-    public static Connection getConnection() {
-        try {
-            if (connection == null || connection.isClosed()) {
+    public static Connection getConnection() throws SQLException {
+        if (connection == null || connection.isClosed()) {
+            try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
 
-                // Read from environment variables (Render)
+                // Read from environment variables (Railway)
                 String host = System.getenv("MYSQLHOST");
                 String port = System.getenv("MYSQLPORT");
-                String db   = System.getenv("MYSQLDATABASE");   // IMPORTANT: name must match Render key
+                String db   = System.getenv("MYSQLDATABASE");
                 String user = System.getenv("MYSQLUSER");
                 String pass = System.getenv("MYSQLPASSWORD");
 
-                // Fallback (only if env not set)
-                if (host == null || host.isEmpty()) host = "switchback.proxy.rlwy.net";
-                if (port == null || port.isEmpty()) port = "35972";
+                // Fallback (for local testing)
+                if (host == null || host.isEmpty()) host = "mysql.railway.internal";
+                if (port == null || port.isEmpty()) port = "3306";
                 if (db == null || db.isEmpty())     db   = "railway";
                 if (user == null || user.isEmpty()) user = "root";
                 if (pass == null || pass.isEmpty()) pass = "KRxBCWRejXxXwYdbmHCwgMhSHPywxaUR";
@@ -32,15 +32,16 @@ public class DBConnection {
 
                 connection = DriverManager.getConnection(url, user, pass);
                 System.out.println("✅ Database Connected Successfully!");
+
+            } catch (ClassNotFoundException e) {
+                System.out.println("❌ MySQL Driver not found!");
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            } catch (SQLException e) {
+                System.out.println("❌ Database connection failed!");
+                e.printStackTrace();
+                throw e;
             }
-        } catch (ClassNotFoundException e) {
-            System.out.println("❌ MySQL Driver not found!");
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        } catch (SQLException e) {
-            System.out.println("❌ Database connection failed!");
-            e.printStackTrace();
-            throw new RuntimeException(e);
         }
         return connection;
     }
