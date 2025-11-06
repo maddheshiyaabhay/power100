@@ -14,30 +14,29 @@ public class DBConnection {
                 // Load MySQL JDBC driver
                 Class.forName("com.mysql.cj.jdbc.Driver");
 
-                // 🌐 Read from Railway environment variables
+                // 🌐 Railway variables
                 String host = System.getenv("MYSQLHOST");
                 String port = System.getenv("MYSQLPORT");
                 String db   = System.getenv("MYSQLDATABASE");
                 String user = System.getenv("MYSQLUSER");
                 String pass = System.getenv("MYSQLPASSWORD");
 
-                // 🟡 Fallback values (agar environment se null aaye)
-                if (host == null || host.isEmpty()) host = "mysql.railway.internal";
-                if (port == null || port.isEmpty()) port = "3306";
-                if (db == null || db.isEmpty())     db = "railway";
+                // 🟡 Fallback values (agar Railway variables na mile)
+                if (host == null || host.isEmpty()) host = "switchback.proxy.rlwy.net";
+                if (port == null || port.isEmpty()) port = "35972";
+                if (db == null || db.isEmpty())     db = "power100db";
                 if (user == null || user.isEmpty()) user = "root";
                 if (pass == null || pass.isEmpty()) pass = "KRxBCWRejXxXwYdbmHCwgMhSHPywxaUR";
 
-                // 🟢 Debug info (temporary - password mat print karna)
-                System.out.println("🔍 DEBUG -> Host: " + host + " | Port: " + port + " | DB: " + db + " | User: " + user);
+                // 🟢 Debug info (optional)
+                System.out.println("🔍 DEBUG -> Connecting to " + host + ":" + port + "/" + db);
 
-                // 🔗 JDBC Connection URL
+                // 🔗 JDBC URL
                 String url = "jdbc:mysql://" + host + ":" + port + "/" + db
                         + "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&autoReconnect=true";
 
-                // Connect to MySQL
+                // Connect
                 connection = DriverManager.getConnection(url, user, pass);
-
                 System.out.println("✅ Database Connected Successfully!");
 
             } catch (ClassNotFoundException e) {
