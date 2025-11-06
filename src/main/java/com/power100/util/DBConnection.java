@@ -1,47 +1,25 @@
-package com.power100.util;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-
 public class DBConnection {
-
-    private static Connection connection = null;
-
     public static Connection getConnection() {
         try {
-            if (connection == null || connection.isClosed()) {
-                Class.forName("com.mysql.cj.jdbc.Driver");
+            String host = System.getenv("MYSQLHOST");      // या MYSQL_HOST जैसा तू Railway में डालेगा
+            String port = System.getenv("MYSQLPORT");
+            String db   = System.getenv("MYSQLDATABASE");
+            String user = System.getenv("MYSQLUSER");
+            String pass = System.getenv("MYSQLPASSWORD");
 
-                // Read from environment variables (Render)
-                String host = System.getenv("MYSQLHOST");
-                String port = System.getenv("MYSQLPORT");
-                String db   = System.getenv("MYSQLDATABASE");   // IMPORTANT: name must match Render key
-                String user = System.getenv("MYSQLUSER");
-                String pass = System.getenv("MYSQLPASSWORD");
-
-                // Fallback (only if env not set)
-                if (host == null || host.isEmpty()) host = "switchback.proxy.rlwy.net";
-                if (port == null || port.isEmpty()) port = "35972";
-                if (db == null || db.isEmpty())     db   = "railway";
-                if (user == null || user.isEmpty()) user = "root";
-                if (pass == null || pass.isEmpty()) pass = "KRxBCWRejXxXwYdbmHCwgMhSHPywxaUR";
-
-                String url = "jdbc:mysql://" + host + ":" + port + "/" + db
-                        + "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
-
-                connection = DriverManager.getConnection(url, user, pass);
-                System.out.println("✅ Database Connected Successfully!");
+            if (host == null || port == null) {
+                // fallback (development) — optional
+                host = "localhost";
+                port = "3306";
+                db = "power100";
             }
-        } catch (ClassNotFoundException e) {
-            System.out.println("❌ MySQL Driver not found!");
+
+            String url = "jdbc:mysql://" + host + ":" + port + "/" + db + "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            return DriverManager.getConnection(url, user, pass);
+        } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
-        } catch (SQLException e) {
-            System.out.println("❌ Database connection failed!");
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            return null;
         }
-        return connection;
     }
 }
