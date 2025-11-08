@@ -1,17 +1,23 @@
-<%@ page import="java.sql.*, com.power100.util.DBConnection" %>
+<%@ page import="java.sql.*" %>
+<%@ page import="com.power100.util.DBConnection" %>
+
 <%
-    try {
-        // Get connection from DBConnection class
-        Connection conn = DBConnection.getConnection();
+Connection con = null;
+try {
+    // 🔗 Connect using Java backend class
+    con = DBConnection.getConnection();
 
-        if (conn != null && !conn.isClosed()) {
-            out.println("<div style='color:green; font-weight:bold;'>✅ Database Connected Successfully!</div>");
-        } else {
-            out.println("<div style='color:red; font-weight:bold;'>❌ Connection object is null or closed.</div>");
-        }
-
-    } catch (Exception e) {
-        out.println("<div style='color:red; font-weight:bold;'>❌ Database Connection Error: " + e.getMessage() + "</div>");
-        e.printStackTrace();
+    if (con != null && !con.isClosed()) {
+        // ✅ Successfully connected (debug message optional)
+        System.out.println("✅ [dbConnection.jsp] Database Connected Successfully!");
+    } else {
+        out.println("<div style='color:red;font-weight:bold;'>❌ Database connection failed (connection is null)</div>");
     }
+
+} catch (Exception e) {
+    // ❌ Agar connection me koi error aaye to message dikhao
+    out.println("<div style='color:red;font-weight:bold;'>❌ Database connection not found: "
+                + e.getMessage() + "</div>");
+    e.printStackTrace();
+}
 %>
