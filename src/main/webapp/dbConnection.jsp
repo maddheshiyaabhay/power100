@@ -2,22 +2,33 @@
 <%@ page import="com.power100.util.DBConnection" %>
 
 <%
+/*
+  This file creates (or reuses) a single JDBC Connection using DBConnection.java
+  and exposes it exactly where your pages expect it:
+    - session attribute "dbConn"       -> java.sql.Connection
+    - session attribute "dbConnError"  -> String (only when fail)
+  DO NOT close this connection here; your util class manages the lifecycle.
+*/
 Connection con = null;
 try {
-    // 🔗 Connect using Java backend class
-    con = DBConnection.getConnection();
+    con = DBConnection.getConnection();     // reuse/open from util
+    session.setAttribute("dbConn", con);    // <-- products.jsp reads this
+    session.removeAttribute("dbConnError"); // clear old error if any
 
-    if (con != null && !con.isClosed()) {
-        // ✅ Successfully connected (debug message optional)
-        System.out.println("✅ [dbConnection.jsp] Database Connected Successfully!");
-    } else {
-        out.println("<div style='color:red;font-weight:bold;'>❌ Database connection failed (connection is null)</div>");
-    }
+    // Optional debug in server logs (not shown to users)
+    System.out.println("✅ [dbConnection.jsp] Connection ready");
+} catch (Exception ex) {
+    // Store error for pages that read it
+    session.setAttribute("dbConn", null);
+    session.setAttribute("dbConnError", ex.getMessage());
 
-} catch (Exception e) {
-    // ❌ Agar connection me koi error aaye to message dikhao
-    out.println("<div style='color:red;font-weight:bold;'>❌ Database connection not found: "
-                + e.getMessage() + "</div>");
-    e.printStackTrace();
+    // Same user-visible message your pages already show
+    out.println("<div style='color:#b91c1c;background:#fee2e2;border:1px solid #fecaca;"
+      + "padding:8px 12px;border-radius:8px;font-weight:600;'>"
+      + "Database connection not found (Check dbConnection.jsp)"
+      + "</div>");
+
+    // Log full stack for debugging
+    ex.printStackTrace();
 }
 %>
