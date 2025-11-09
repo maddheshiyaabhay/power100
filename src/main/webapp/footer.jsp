@@ -8,7 +8,7 @@
       <img src="images/power100logo.png" alt="Power100 Logo" class="footer-logo">
       <h3>Power100 Home Appliances Pvt. Ltd.</h3>
       <p>Delivering <b>Smart TVs, Coolers & Washing Machines</b> with premium quality and trust.</p>
-      <p><strong>📍 Address:</strong> C-3, Sec-2, DSIDC Bawana Industrial Area, Delhi - 110039</p>
+      <p><strong>📍 Address:</strong>Pratappur Kamaicha Chanda Lambhua Sultanpur (U.P)-222303</p>
       <p><strong>📞 Phone:</strong> 8081782444, 9236504990</p>
       <p><strong>📧 Email:</strong> power100hundred@gmail.com</p>
     </div>
@@ -48,7 +48,7 @@
       <h4>📍 Location</h4>
       <!-- FIXED Google Map Embed -->
       <iframe
-        src="https://www.google.com/maps?q=DSIDC%20Bawana%20Industrial%20Area%20Delhi&output=embed"
+        src="https://www.google.com/maps?q=PratappurKamaicha%20Chanda%20Lambhua%20Sultanpur%20U.P&output=embed"
         width="100%" height="180" style="border:0; border-radius:10px;" allowfullscreen loading="lazy"></iframe>
     </div>
   </div>
