@@ -18,12 +18,10 @@ public class RegisterServlet extends HttpServlet {
 
     // --------- IMPORTANT: Replace DB_PASS with the exact password from your Railway screenshot ----------
     // Host/port/db/user filled from your screenshot (common Railway proxy values)
-    private static final String DB_URL =
-        "jdbc:mysql://switchback.proxy.rly.net:35972/railway?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&connectTimeout=5000";
-    private static final String DB_USER = "root";
-    private static final String DB_PASS = "<KRxBCWRejXxXwYdbmHCwgMhSHPywxaUR>"; // <-- REPLACE THIS
-
-    // -----------------------------------------------------------------------------------------------
+    String DB_URL = "jdbc:mysql://switchback.proxy.rlwy.net:35972/railway"
+              + "?allowPublicKeyRetrieval=true&useSSL=true&serverTimezone=UTC&connectTimeout=5000";
+String DB_USER = "root";
+String DB_PASS = "KRxBCWRejXxXwYdbmHCwgMhSHPywxaUR";
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
