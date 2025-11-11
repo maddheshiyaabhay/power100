@@ -21,7 +21,7 @@ public class RegisterServlet extends HttpServlet {
     private static final String DB_URL =
         "jdbc:mysql://switchback-proxy.rly.net:35972/railway?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&connectTimeout=5000";
     private static final String DB_USER = "root";
-    private static final String DB_PASS = "<PUT_RAILWAY_PASSWORD_HERE>"; // <-- REPLACE THIS
+    private static final String DB_PASS = "<KRxBCWRejXxXwYdbmHCwgMhSHPywxaUR>"; // <-- REPLACE THIS
 
     // -----------------------------------------------------------------------------------------------
 
